@@ -1,1 +1,49 @@
-Hello World
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* Chat container */
+        .chat-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            max-width: 300px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Chat message */
+        .chat-message {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        /* User message */
+        .user-message {
+            text-align: right;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Bot message */
+        .bot-message {
+            text-align: left;
+            background-color: #008CBA;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-message user-message">Hello, how can I help you?</div>
+        <div class="chat-message bot-message">Hi! I'm here to assist you.</div>
+        <div class="chat-message user-message">I need help with something.</div>
+        <div class="chat-message bot-message">Sure, what do you need assistance with?</div>
+    </div>
+</body>
+</html>
