@@ -5,26 +5,15 @@ Hello World
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Chat</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Simple Chat</title>
 </head>
 <body>
-    <div class="chat-container">
-        <!-- 第一个朋友的聊天消息 -->
-        <div class="chat-message friend1-message">Hi, how are you?</div>
-        <!-- 第二个朋友的聊天消息 -->
-        <div class="chat-message friend2-message">Hey there! What's up?</div>
-        <!-- 你的聊天消息 -->
-        <div class="chat-message my-message">Hello friends! I'm glad you're both here.</div>
-        <!-- 输入框 -->
-        <div class="message-input">
-            <input type="text" placeholder="Type your message...">
-            <button>Send</button>
-        </div>
-    </div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script src="script.js"></script>
 </body>
 </html>
 
 <link rel="stylesheet" href="style.css">
 
-<script src="script.js"></script>

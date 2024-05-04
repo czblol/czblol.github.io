@@ -64,3 +64,39 @@ function sendMessage(message) {
 
 // 示例：发送消息
 sendMessage('Hello, WebSocket server!');
+
+
+// 监听连接成功事件
+ws.addEventListener('open', function (event) {
+    console.log('Connected to WebSocket server');
+});
+
+// 监听收到消息事件
+ws.addEventListener('message', function (event) {
+    console.log('Received message:', event.data);
+    // 在此处处理接收到的消息，比如将消息显示在页面上
+});
+
+// 监听连接关闭事件
+ws.addEventListener('close', function (event) {
+    console.log('Connection closed');
+});
+
+// 监听发生错误事件
+ws.addEventListener('error', function (event) {
+    console.error('WebSocket error:', event);
+});
+
+// 发送消息
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+    if (message.trim() !== '') {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(message);
+            messageInput.value = '';
+        } else {
+            console.error('WebSocket connection is not open');
+        }
+    }
+}
