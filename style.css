@@ -1,0 +1,60 @@
+/* Chat container */
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    max-width: 300px;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chat message */
+.chat-message {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Your message */
+.my-message {
+    text-align: right;
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Friend 1 message */
+.friend1-message {
+    text-align: left;
+    background-color: #008CBA;
+    color: white;
+}
+
+/* Friend 2 message */
+.friend2-message {
+    text-align: left;
+    background-color: #ff9800;
+    color: white;
+}
+
+/* Message input */
+.message-input {
+    padding: 10px;
+    background-color: #f3f3f3;
+}
+
+.message-input input[type="text"] {
+    width: 200px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+
+.message-input button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
