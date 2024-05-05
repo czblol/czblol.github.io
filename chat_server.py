@@ -21,3 +21,36 @@ async def main():
 
 # 运行服务器
 asyncio.run(main())
+
+import random
+
+# 聊天机器人的回复
+responses = {
+    "你好": ["你好！", "嗨，你好啊！", "你好，有什么可以帮助你的吗？"],
+    "你叫什么名字": ["我是聊天机器人！", "我的名字是 ChatBot。"],
+    "你多大了": ["我是一个聊天机器人，没有年龄。"],
+    "再见": ["再见！", "下次再聊！", "祝你有美好的一天！"]
+}
+
+def chatbot_response(message):
+    """
+    根据用户消息返回聊天机器人的回复
+    """
+    if message in responses:
+        return random.choice(responses[message])
+    else:
+        return "抱歉，我不明白你在说什么。"
+
+# 示例对话
+conversation = [
+    "你好",
+    "你叫什么名字",
+    "你多大了",
+    "再见"
+]
+
+# 对话
+for message in conversation:
+    print("User:", message)
+    print("ChatBot:", chatbot_response(message))
+
