@@ -80,6 +80,31 @@
       chatBox.appendChild(messageElement);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    function getBotReply(message) {
+      // 根据用户消息返回聊天机器人的回复
+      switch(message.toLowerCase()) {
+        case 'price':
+          return 'legendary RM90/6-10day(for gm to legendary)！';
+        case 'ig':
+          return 'ig:ctt_codmstudio！';
+        case '你多大了':
+          return '我是一个聊天机器人，没有年龄。';
+        case '再见':
+          return '再见！';
+        case '今天天气如何？':
+          return '今天天气晴朗，温度适宜。';
+        case '你有兄弟姐妹吗？':
+          return '我是一个孤独的聊天机器人，没有兄弟姐妹。';
+        case '你喜欢什么食物？':
+          return '我不吃东西，但我喜欢数据！';
+        default:
+          return '抱歉，我不明白你在说什么。';
+      }
+    }
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
