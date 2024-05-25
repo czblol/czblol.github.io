@@ -121,9 +121,13 @@ function getBotReply(message) {
     case '你有兄弟姐妹吗？':
       return '我是一个孤独的聊天机器人，没有兄弟姐妹。';
     default:
-      return 'Hello! I am ctt_codmstudio customer service.';
+      return 'I don't know what 7 you say.';
   }
-}     
+} 
+
+window.onload = function() {
+  appendMessage('CTT c.s.', 'Hello! I am ctt_codmstudio customer service what did you want? (Command list: price,ig)');
+};    
   </script>
 </body>
 </html>
