@@ -31,6 +31,10 @@
     border-radius: 5px;
   }
 
+  .message {
+    margin-bottom: 10px;
+  }
+
   #user-input {
     width: calc(100% - 60px);
     padding: 8px;
@@ -61,73 +65,62 @@
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
 
+    function appendMessage(sender, message) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+
+      // 用户消息
+      if (sender === 'You') {
+        messageElement.textContent = `${sender}: ${message}`;
+      } else {
+        // 机器人消息
+        messageElement.textContent = `${sender}: ${message}`;
+      }
+
+      chatBox.appendChild(messageElement);
+
+      // 在用户和机器人消息之间插入空行
+      chatBox.appendChild(document.createElement('br'));
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
     sendBtn.addEventListener('click', function() {
       const userMessage = userInput.value.trim();
       if (userMessage !== '') {
         appendMessage('You', userMessage);
         userInput.value = '';
-        // 在这里可以添加处理用户消息并生成机器人回复的代码
-        // 这里只是一个简单的示例，回复固定的消息
-        const replyMessage = getBotReply(userMessage);
-        setTimeout(() => appendMessage('Bot', replyMessage), 500);
+
+        // 获取机器人回复
+        const botReply = getBotReply(userMessage);
+        setTimeout(() => appendMessage('Bot', botReply), 500); // 0.5秒延迟模拟思考时间
       }
     });
 
-function appendMessage(sender, message) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  
-  // 用户消息
-  if (sender === 'You') {
-    messageElement.textContent = `${sender}: ${message}`;
-  } else {
-    // 机器人消息
-    messageElement.textContent = `${sender}: ${message}`;
-  }
-  
-  chatBox.appendChild(messageElement);
+    function getBotReply(message) {
+      // 根据用户消息返回聊天机器人的回复
+      switch(message.toLowerCase()) {
+        case 'price':
+          return 'legendary RM90/6-10day(for gm team players) Epic RM60/3-5day';
+        case 'ig':
+          return 'ig:ctt_codmstudio！';
+        case '你多大了':
+          return '我是一个聊天机器人，没有年龄。';
+        case '再见':
+          return '再见！';
+        case '今天天气如何？':
+          return '今天天气晴朗，温度适宜。';
+        case '你有兄弟姐妹吗？':
+          return '我是一个孤独的聊天机器人，没有兄弟姐妹。';
+        default:
+          return 'Hello! I am ctt_codmstudio customer service what did you want? (Command list: price,ig)';
+      }
+    }
 
-  // 在用户和机器人消息之间插入空行
-  chatBox.appendChild(document.createElement('br'));
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-sendBtn.addEventListener('click', function() {
-  const userMessage = userInput.value.trim();
-  if (userMessage !== '') {
-    appendMessage('You', userMessage);
-    userInput.value = '';
-
-    // 获取机器人回复
-    const botReply = getBotReply(userMessage);
-    appendMessage('CTT c.s.', botReply);
-  }
-});
-
-function getBotReply(message) {
-  // 根据用户消息返回聊天机器人的回复
-  switch(message.toLowerCase()) {
-    case 'price':
-      return 'legendary RM90/6-10day(for gm team only)';
-    case 'ig':
-      return 'ig:ctt_codmstudio！';
-    case '你多大了':
-      return '我是一个聊天机器人，没有年龄。';
-    case '再见':
-      return '再见！';
-    case '今天天气如何？':
-      return '今天天气晴朗，温度适宜。';
-    case '你有兄弟姐妹吗？':
-      return '我是一个孤独的聊天机器人，没有兄弟姐妹。';
-    default:
-      return 'I don't know what 7 you say.';
-  }
-} 
-
-window.onload = function() {
-  appendMessage('Bot', 'Hello! I am ctt_codmstudio customer service what did you want? (Command list: price,ig)');
-};    
+    // 页面加载时自动发送欢迎消息
+    window.onload = function() {
+      appendMessage('Bot', 'Hello! I am ctt_codmstudio customer service what did you want? (Command list: price,ig)');
+    };
   </script>
 </body>
 </html>
