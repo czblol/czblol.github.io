@@ -57,40 +57,44 @@ body {
 </div>
 
 <script>
-const chatBox = document.getElementById('chat-box');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
 
-sendBtn.addEventListener('click', function() {
-  const userMessage = userInput.value.trim();
-  if (userMessage !== '') {
-    appendMessage('You', userMessage);
-    userInput.value = '';
-    // 向后端 API 发送消息并获取回复
-    fetch('/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message: userMessage })
-    })
-    .then(response => response.json())
-    .then(data => {
-      appendMessage('Chat Bot', data.message);
-    })
-    .catch(error => {
-      console.error('Error:', error);
+    // 页面加载时自动发送欢迎消息
+    window.onload = function() {
+      appendMessage('Bot', 'Hello! I am ctt_gamingstudio.');
+    };
+
+    sendBtn.addEventListener('click', function() {
+      const userMessage = userInput.value.trim();
+      if (userMessage !== '') {
+        appendMessage('You', userMessage);
+        userInput.value = '';
+
+        // 发送消息给后端处理
+        fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: userMessage })
+        })
+        .then(response => response.json())
+        .then(data => {
+          appendMessage('Bot', data.reply);
+        })
+        .catch(error => console.error('Error:', error));
+      }
     });
-  }
-});
 
-function appendMessage(sender, message) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  messageElement.textContent = `${sender}: ${message}`;
-  chatBox.appendChild(messageElement);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+    function appendMessage(sender, message) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+      messageElement.textContent = `${sender}: ${message}`;
+      chatBox.appendChild(messageElement);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 </script>
 </body>
 </html>
