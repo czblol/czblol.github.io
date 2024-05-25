@@ -6,18 +6,84 @@
 <title>Chat Bot</title>
 <style>
   /* CSS样式，可以根据需要自行修改 */
-  /* 在这里添加你的CSS样式 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  #chat-box {
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .message {
+    margin-bottom: 10px;
+  }
+
+  #user-input {
+    width: calc(100% - 60px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  #send-btn {
+    width: 50px;
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
-  <div id="chat-box"></div>
-  <input type="text" id="user-input" placeholder="Type a message...">
-  <button id="send-btn">Send</button>
+  <div class="container">
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type a message...">
+    <button id="send-btn">Send</button>
+  </div>
 
   <script>
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
+
+    function appendMessage(sender, message) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+
+      // 用户消息
+      if (sender === 'You') {
+        messageElement.textContent = `${sender}: ${message}`;
+      } else {
+        // 机器人消息
+        messageElement.textContent = `${sender}: ${message}`;
+      }
+
+      chatBox.appendChild(messageElement);
+
+      // 在用户和机器人消息之间插入空行
+      chatBox.appendChild(document.createElement('br'));
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
     sendBtn.addEventListener('click', function() {
       const userMessage = userInput.value.trim();
@@ -25,27 +91,36 @@
         appendMessage('You', userMessage);
         userInput.value = '';
 
-        // 发送消息给后端处理
-        fetch('/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ message: userMessage })
-        })
-        .then(response => response.json())
-        .then(data => {
-          appendMessage('Bot', data.reply);
-        })
-        .catch(error => console.error('Error:', error));
+        // 获取机器人回复
+        const botReply = getBotReply(userMessage);
+        setTimeout(() => appendMessage('Bot', botReply), 500); // 0.5秒延迟模拟思考时间
       }
     });
 
-    function appendMessage(sender, message) {
-      const messageElement = document.createElement('div');
-      messageElement.textContent = `${sender}: ${message}`;
-      chatBox.appendChild(messageElement);
+    function getBotReply(message) {
+      // 根据用户消息返回聊天机器人的回复
+      switch(message.toLowerCase()) {
+        case 'price':
+          return 'legendary RM90/6-10day(for gm team players) Epic RM60/3-5day';
+        case 'ig':
+          return 'ig:ctt_gamingstudio！';
+        case '你多大了':
+          return '我是一个聊天机器人，没有年龄。';
+        case '再见':
+          return '再见！';
+        case '今天天气如何？':
+          return '今天天气晴朗，温度适宜。';
+        case '你有兄弟姐妹吗？':
+          return '我是一个孤独的聊天机器人，没有兄弟姐妹。';
+        default:
+          return 'I dont know what 7 you say (Command list: price,ig)';
+      }
     }
+
+    // 页面加载时自动发送欢迎消息
+    window.onload = function() {
+      appendMessage('Bot', 'Hello! I am ctt_gamingstudio what did you want? (Command list: price,ig)');
+    };
   </script>
 </body>
 </html>
