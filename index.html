@@ -5,66 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat Bot</title>
 <style>
-/* CSS 样式，可以根据需要自行修改 */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
-}
-
-.container {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#chat-box {
-  height: 300px;
-  overflow-y: scroll;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#user-input {
-  width: calc(100% - 60px);
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#send-btn {
-  width: 50px;
-  padding: 8px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  /* CSS样式，可以根据需要自行修改 */
+  /* 在这里添加你的CSS样式 */
 </style>
 </head>
 <body>
-<div class="container">
   <div id="chat-box"></div>
   <input type="text" id="user-input" placeholder="Type a message...">
   <button id="send-btn">Send</button>
-</div>
 
-<script>
+  <script>
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
-
-    // 页面加载时自动发送欢迎消息
-    window.onload = function() {
-      appendMessage('Bot', 'Hello! I am ctt_gamingstudio.');
-    };
 
     sendBtn.addEventListener('click', function() {
       const userMessage = userInput.value.trim();
@@ -90,11 +43,9 @@ body {
 
     function appendMessage(sender, message) {
       const messageElement = document.createElement('div');
-      messageElement.classList.add('message');
       messageElement.textContent = `${sender}: ${message}`;
       chatBox.appendChild(messageElement);
-      chatBox.scrollTop = chatBox.scrollHeight;
     }
-</script>
+  </script>
 </body>
 </html>
