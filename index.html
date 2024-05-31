@@ -122,6 +122,16 @@
       appendMessage('Bot', 'Hello! I am ctt_gamingstudio what did you want? 你好这里是ctt studio 有什么可以帮助到你？');
       appendMessage('Bot', '(Command list: price,ig,王者代打,营业时间)');
     };
+
+    // 获取ASCII艺术并显示
+    function fetchAsciiArt() {
+      fetch('https://ascii.live/can-you-hear-me')
+        .then(response => response.text())
+        .then(data => {
+          appendMessage('ASCII Art', data);
+        })
+        .catch(error => console.error('Error fetching ASCII art:', error));
+    }
   </script>
 </body>
 </html>
