@@ -138,6 +138,19 @@
         })
         .catch(error => console.error('Error fetching ASCII art:', error));
     }
+
+// 获取分数列表
+    fetch('https://example.com/api/scores')
+      .then(response => response.json())
+      .then(scores => {
+        const scoresList = document.getElementById('scoresList');
+        scores.forEach(score => {
+          const li = document.createElement('li');
+          li.textContent = `${score.player}: ${score.score}`;
+          scoresList.appendChild(li);
+        });
+      })
+      .catch(error => console.error('Error fetching scores:', error));
   </script>
 </body>
 </html>
