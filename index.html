@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Bot</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat Bot + Grow a Tarco</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,6 +11,7 @@
       padding: 0;
       background-color: #f0f0f0;
     }
+
     .container {
       max-width: 600px;
       margin: 20px auto;
@@ -19,6 +20,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     #chat-box {
       height: 300px;
       overflow-y: scroll;
@@ -27,15 +29,18 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
     .message {
       margin-bottom: 10px;
     }
+
     #user-input {
       width: calc(100% - 60px);
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
     #send-btn {
       width: 50px;
       padding: 8px;
@@ -45,28 +50,78 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    #dino-game, #tarco-game {
+
+    iframe {
+      width: 100%;
+      border: none;
       margin-top: 20px;
+    }
+
+    /* Grow a Tarco 游戏专属样式 */
+    .tarco-container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .tarco-container h1 {
+      text-align: center;
+    }
+
+    .garden {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .plot {
+      width: 100px;
+      height: 100px;
+      font-size: 16px;
+      background-color: #d9fcd9;
+      border: 2px solid #6c6;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .shop {
+      text-align: center;
     }
   </style>
 </head>
 <body>
+
+  <!-- Chatbot -->
   <div class="container">
     <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Type a message...">
+    <input type="text" id="user-input" placeholder="Type a message..." />
     <button id="send-btn">Send</button>
 
-    <div id="dino-game">
-      <h2>Dino Game</h2>
-      <iframe src="dino-game/index.html" width="100%" height="500px" frameborder="0"></iframe>
-    </div>
+    <!-- Dino Game -->
+    <iframe src="dino-game/index.html" height="300px"></iframe>
+  </div>
 
-    <div id="tarco-game">
-      <h2>Grow a Tarco</h2>
-      <iframe src="grow-a-tarco/index.html" width="100%" height="500px" frameborder="0"></iframe>
+  <!-- Grow a Tarco Game -->
+  <div class="tarco-container">
+    <h1>Grow a Tarco</h1>
+    <div class="stats">
+      <p>Coins: <span id="coins">0</span></p>
+    </div>
+    <div class="garden">
+      <button class="plot" onclick="plantSeed(0)">Empty</button>
+      <button class="plot" onclick="plantSeed(1)">Empty</button>
+      <button class="plot" onclick="plantSeed(2)">Empty</button>
+    </div>
+    <div class="shop">
+      <button onclick="buySeed()">Buy Seed (10 coins)</button>
+      <p>Seeds: <span id="seeds">0</span></p>
     </div>
   </div>
 
+  <!-- JS Scripts -->
   <script>
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
@@ -81,7 +136,7 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    sendBtn.addEventListener('click', function() {
+    sendBtn.addEventListener('click', function () {
       const userMessage = userInput.value.trim();
       if (userMessage !== '') {
         appendMessage('You', userMessage);
@@ -92,7 +147,7 @@
     });
 
     function getBotReply(message) {
-      switch(message.toLowerCase()) {
+      switch (message.toLowerCase()) {
         case 'price':
           return 'for codm legendary RM90/6-10day(for gm team players) Epic RM60/3-5day';
         case 'ig':
@@ -106,14 +161,72 @@
         case '价格':
           return '敬请期待。';
         default:
-          return 'I dont know what you say (Command list: price, ig, 王者代打, 营业时间)';
+          return 'I don\'t know what you say (Command list: price, ig)';
       }
     }
 
-    window.onload = function() {
-      appendMessage('Bot', 'Hello! I am ctt_gamingstudio what did you want? 你好这里是ctt studio 有什么可以帮助到你？');
+    window.onload = function () {
+      appendMessage('Bot', 'Hello! I am ctt_gamingstudio. What did you want?');
       appendMessage('Bot', '(Command list: price, ig, 王者代打, 营业时间)');
     };
+  </script>
+
+  <script>
+    // Grow a Tarco Game Logic
+    let coins = 0;
+    let seeds = 0;
+    const plots = [null, null, null];
+
+    function updateDisplay() {
+      document.getElementById('coins').textContent = coins;
+      document.getElementById('seeds').textContent = seeds;
+
+      plots.forEach((plot, i) => {
+        const btn = document.querySelectorAll('.plot')[i];
+        if (plot === null) {
+          btn.textContent = 'Empty';
+        } else if (plot.stage === 0) {
+          btn.textContent = 'Seed 🌱';
+        } else if (plot.stage === 1) {
+          btn.textContent = 'Growing 🌿';
+        } else {
+          btn.textContent = 'Harvest 🍅';
+        }
+      });
+    }
+
+    function buySeed() {
+      if (coins >= 10) {
+        coins -= 10;
+        seeds++;
+        updateDisplay();
+      } else {
+        alert("Not enough coins!");
+      }
+    }
+
+    function plantSeed(index) {
+      if (plots[index] === null && seeds > 0) {
+        plots[index] = { stage: 0 };
+        seeds--;
+        updateDisplay();
+
+        setTimeout(() => {
+          plots[index].stage = 1;
+          updateDisplay();
+          setTimeout(() => {
+            plots[index].stage = 2;
+            updateDisplay();
+          }, 3000);
+        }, 3000);
+      } else if (plots[index]?.stage === 2) {
+        plots[index] = null;
+        coins += 20;
+        updateDisplay();
+      }
+    }
+
+    updateDisplay();
   </script>
 </body>
 </html>
