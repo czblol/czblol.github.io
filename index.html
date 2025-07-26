@@ -1,69 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat Bot</title>
-<style>
-  /* CSS样式，可以根据需要自行修改 */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-  }
-
-  .container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
-  #chat-box {
-    height: 300px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .message {
-    margin-bottom: 10px;
-  }
-
-  #user-input {
-    width: calc(100% - 60px);
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  #send-btn {
-    width: 50px;
-    padding: 8px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  #dino-game {
-    margin-top: 20px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #chat-box {
+      height: 300px;
+      overflow-y: scroll;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    #user-input {
+      width: calc(100% - 60px);
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #send-btn {
+      width: 50px;
+      padding: 8px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #dino-game, #tarco-game {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <div id="chat-box"></div>
     <input type="text" id="user-input" placeholder="Type a message...">
     <button id="send-btn">Send</button>
+
     <div id="dino-game">
+      <h2>Dino Game</h2>
       <iframe src="dino-game/index.html" width="100%" height="500px" frameborder="0"></iframe>
+    </div>
+
+    <div id="tarco-game">
+      <h2>Grow a Tarco</h2>
+      <iframe src="grow-a-tarco/index.html" width="100%" height="500px" frameborder="0"></iframe>
+    </div>
   </div>
 
   <script>
@@ -74,20 +75,9 @@
     function appendMessage(sender, message) {
       const messageElement = document.createElement('div');
       messageElement.classList.add('message');
-
-      // 用户消息
-      if (sender === 'You') {
-        messageElement.textContent = `${sender}: ${message}`;
-      } else {
-        // 机器人消息
-        messageElement.textContent = `${sender}: ${message}`;
-      }
-
+      messageElement.textContent = `${sender}: ${message}`;
       chatBox.appendChild(messageElement);
-
-      // 在用户和机器人消息之间插入空行
       chatBox.appendChild(document.createElement('br'));
-
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
@@ -96,15 +86,12 @@
       if (userMessage !== '') {
         appendMessage('You', userMessage);
         userInput.value = '';
-
-        // 获取机器人回复
         const botReply = getBotReply(userMessage);
-        setTimeout(() => appendMessage('Bot', botReply), 500); // 0.5秒延迟模拟思考时间
+        setTimeout(() => appendMessage('Bot', botReply), 500);
       }
     });
 
     function getBotReply(message) {
-      // 根据用户消息返回聊天机器人的回复
       switch(message.toLowerCase()) {
         case 'price':
           return 'for codm legendary RM90/6-10day(for gm team players) Epic RM60/3-5day';
@@ -119,38 +106,14 @@
         case '价格':
           return '敬请期待。';
         default:
-          return 'I dont know what 7 you say (Command list: price,ig)';
+          return 'I dont know what you say (Command list: price, ig, 王者代打, 营业时间)';
       }
     }
 
-    // 页面加载时自动发送欢迎消息
     window.onload = function() {
       appendMessage('Bot', 'Hello! I am ctt_gamingstudio what did you want? 你好这里是ctt studio 有什么可以帮助到你？');
-      appendMessage('Bot', '(Command list: price,ig,王者代打,营业时间)');
+      appendMessage('Bot', '(Command list: price, ig, 王者代打, 营业时间)');
     };
-
-    // 获取ASCII艺术并显示
-    function fetchAsciiArt() {
-      fetch('https://ascii.live/can-you-hear-me')
-        .then(response => response.text())
-        .then(data => {
-          appendMessage('ASCII Art', data);
-        })
-        .catch(error => console.error('Error fetching ASCII art:', error));
-    }
-
-// 获取分数列表
-    fetch('https://example.com/api/scores')
-      .then(response => response.json())
-      .then(scores => {
-        const scoresList = document.getElementById('scoresList');
-        scores.forEach(score => {
-          const li = document.createElement('li');
-          li.textContent = `${score.player}: ${score.score}`;
-          scoresList.appendChild(li);
-        });
-      })
-      .catch(error => console.error('Error fetching scores:', error));
   </script>
 </body>
 </html>
