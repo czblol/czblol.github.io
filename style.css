@@ -42,6 +42,19 @@ body {
 }
 
 /* Grow a Tarco 游戏样式 */
+.tarco-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-image: url('images/wood.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: #fff;
+}
+
 .stats, .shop {
   margin-top: 20px;
   font-size: 18px;
