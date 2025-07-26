@@ -57,7 +57,6 @@
       margin-top: 20px;
     }
 
-    /* 游戏样式 */
     .tarco-container {
       max-width: 600px;
       margin: 40px auto;
@@ -99,9 +98,20 @@
       align-items: center;
     }
 
-    .shop button {
+    .shop-item {
+      display: flex;
+      align-items: center;
       margin-bottom: 10px;
-      padding: 10px 20px;
+    }
+
+    .seed-img {
+      width: 50px;
+      margin-right: 10px;
+    }
+
+    .shop button {
+      margin-top: 5px;
+      padding: 6px 14px;
       background-color: #ffa500;
       border: none;
       border-radius: 8px;
@@ -113,152 +123,150 @@
 </head>
 <body>
 
-<button onclick="document.getElementById('bgm').play()">Play Music</button>
-
+<!-- 背景音乐 -->
 <audio id="bgm" loop>
   <source src="music/bgmtarco.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
+<!-- 可选播放按钮 -->
+<!-- <button onclick="document.getElementById('bgm').play()">🎵 播放音乐</button> -->
 
-  <!-- Chatbot -->
-  <div class="container">
-    <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Type a message..." />
-    <button id="send-btn">Send</button>
-    <iframe src="dino-game/index.html" height="300px"></iframe>
+<!-- Grow a Tarco 游戏 -->
+<div class="tarco-container">
+  <h1>Grow a Tarco</h1>
+  <div class="stats">
+    <p>Coins: <span id="coins">0</span> | Seeds: <span id="seeds">0</span></p>
   </div>
+  <div class="garden">
+    <button class="plot" onclick="plantSeed(0)">Empty</button>
+    <button class="plot" onclick="plantSeed(1)">Empty</button>
+    <button class="plot" onclick="plantSeed(2)">Empty</button>
+  </div>
+  <div class="shop">
+    <h2>Seed Shop</h2>
 
-  <!-- Grow a Tarco -->
-  <div class="tarco-container">
-    <h1>Grow a Tarco</h1>
-    <div class="stats">
-      <p>Coins: <span id="coins">0</span> | Seeds: <span id="seeds">0</span></p>
-    </div>
-    <div class="garden">
-      <button class="plot" onclick="plantSeed(0)">Empty</button>
-      <button class="plot" onclick="plantSeed(1)">Empty</button>
-      <button class="plot" onclick="plantSeed(2)">Empty</button>
-    </div>
-    <div class="shop">
-      <h2>Seed Shop</h2>
-
-      <div class="shop-item">
-        <img src="images/Apple.png" width="80" alt="Apple Seed" class="seed-img">
-        <div class="item-info">
-          <p>🍎 Apple Seed - 10 coins</p>
-          <button onclick="buyApple()">Buy</button>
-        </div>
+    <div class="shop-item">
+      <img src="images/Apple.png" class="seed-img" alt="Apple Seed">
+      <div class="item-info">
+        <p>🍎 Apple Seed - 10 coins</p>
+        <button onclick="buySeed()">Buy</button>
       </div>
+    </div>
 
-      <div class="shop-item">
-        <img src="images/banana.png" alt="Banana Seed" class="seed-img">
-        <div class="item-info">
-          <p>🍌 Banana Seed - 15 coins</p>
-          <button onclick="buyBanana()">Buy</button>
-        </div>
+    <div class="shop-item">
+      <img src="images/banana.png" class="seed-img" alt="Banana Seed">
+      <div class="item-info">
+        <p>🍌 Banana Seed - 15 coins</p>
+        <button onclick="buySeed()">Buy</button>
       </div>
+    </div>
 
-      <div class="shop-item">
-        <img src="images/orange.png" alt="Orange Seed" class="seed-img">
-        <div class="item-info">
-          <p>🍊 Orange Seed - 20 coins</p>
-          <button onclick="buyOrange()">Buy</button>
-        </div>
+    <div class="shop-item">
+      <img src="images/orange.png" class="seed-img" alt="Orange Seed">
+      <div class="item-info">
+        <p>🍊 Orange Seed - 20 coins</p>
+        <button onclick="buySeed()">Buy</button>
       </div>
     </div>
   </div>
+</div>
 
-      <button onclick="buySeed()">🛒 Buy Seed (10 coins)</button>
-    </div>
-  </div>
+<!-- Chatbot + Dino Game -->
+<div class="container">
+  <div id="chat-box"></div>
+  <input type="text" id="user-input" placeholder="Type a message..." />
+  <button id="send-btn">Send</button>
+  <iframe src="dino-game/index.html" height="300px"></iframe>
+</div>
 
-  <script>
-    // 聊天机器人逻辑
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
+<script>
+  // 聊天机器人逻辑
+  const chatBox = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
 
-    function appendMessage(sender, message) {
-      const msg = document.createElement('div');
-      msg.classList.add('message');
-      msg.textContent = `${sender}: ${message}`;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
+  function appendMessage(sender, message) {
+    const msg = document.createElement('div');
+    msg.classList.add('message');
+    msg.textContent = `${sender}: ${message}`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  sendBtn.onclick = () => {
+    const userMessage = userInput.value.trim();
+    if (userMessage !== '') {
+      appendMessage('You', userMessage);
+      userInput.value = '';
+      const reply = getBotReply(userMessage);
+      setTimeout(() => appendMessage('Bot', reply), 500);
     }
+  };
 
-    sendBtn.onclick = () => {
-      const userMessage = userInput.value.trim();
-      if (userMessage !== '') {
-        appendMessage('You', userMessage);
-        userInput.value = '';
-        const reply = getBotReply(userMessage);
-        setTimeout(() => appendMessage('Bot', reply), 500);
-      }
-    };
-
-    function getBotReply(msg) {
-      switch (msg.toLowerCase()) {
-        case 'price': return 'Legendary RM90 | Epic RM60';
-        case 'ig': return 'IG: @ctt_gamingstudio';
-        case '营业时间': return '4pm - 10pm';
-        case '再见': return '再见！';
-        default: return 'Command not found (try: price, ig)';
-      }
+  function getBotReply(msg) {
+    switch (msg.toLowerCase()) {
+      case 'price': return 'Legendary RM90 | Epic RM60';
+      case 'ig': return 'IG: @ctt_gamingstudio';
+      case '营业时间': return '4pm - 10pm';
+      case '再见': return '再见！';
+      default: return 'Command not found (try: price, ig)';
     }
+  }
 
-    window.onload = () => {
-      appendMessage('Bot', 'Hello! Welcome to CTT Gaming Studio!');
-      appendMessage('Bot', 'Command list: price, ig, 营业时间');
-    };
+  window.onload = () => {
+    appendMessage('Bot', 'Hello! Welcome to CTT Gaming Studio!');
+    appendMessage('Bot', 'Command list: price, ig, 营业时间');
+  };
 
-    // 游戏逻辑
-    let coins = 0;
-    let seeds = 0;
-    const plots = [null, null, null];
+  // 游戏逻辑
+  let coins = 0;
+  let seeds = 0;
+  const plots = [null, null, null];
 
-    function updateDisplay() {
-      document.getElementById('coins').textContent = coins;
-      document.getElementById('seeds').textContent = seeds;
-      document.querySelectorAll('.plot').forEach((btn, i) => {
-        const state = plots[i];
-        btn.textContent = state === null ? 'Empty' :
-          state.stage === 0 ? 'Seed 🌱' :
-          state.stage === 1 ? 'Growing 🌿' :
-          'Harvest 🍅';
-      });
+  function updateDisplay() {
+    document.getElementById('coins').textContent = coins;
+    document.getElementById('seeds').textContent = seeds;
+    document.querySelectorAll('.plot').forEach((btn, i) => {
+      const state = plots[i];
+      btn.textContent = state === null ? 'Empty' :
+        state.stage === 0 ? 'Seed 🌱' :
+        state.stage === 1 ? 'Growing 🌿' :
+        'Harvest 🍅';
+    });
+  }
+
+  function buySeed() {
+    if (coins >= 10) {
+      coins -= 10;
+      seeds += 1;
+      updateDisplay();
+    } else {
+      alert('Not enough coins!');
     }
+  }
 
-    function buySeed() {
-      if (coins >= 10) {
-        coins -= 10;
-        seeds += 1;
-        updateDisplay();
-      } else {
-        alert('Not enough coins!');
-      }
-    }
-
-    function plantSeed(index) {
-      if (plots[index] === null && seeds > 0) {
-        plots[index] = { stage: 0 };
-        seeds--;
+  function plantSeed(index) {
+    if (plots[index] === null && seeds > 0) {
+      plots[index] = { stage: 0 };
+      seeds--;
+      updateDisplay();
+      setTimeout(() => {
+        plots[index].stage = 1;
         updateDisplay();
         setTimeout(() => {
-          plots[index].stage = 1;
+          plots[index].stage = 2;
           updateDisplay();
-          setTimeout(() => {
-            plots[index].stage = 2;
-            updateDisplay();
-          }, 3000);
         }, 3000);
-      } else if (plots[index]?.stage === 2) {
-        plots[index] = null;
-        coins += 20;
-        updateDisplay();
-      }
+      }, 3000);
+    } else if (plots[index]?.stage === 2) {
+      plots[index] = null;
+      coins += 20;
+      updateDisplay();
     }
+  }
 
-    updateDisplay();
-  </script>
+  updateDisplay();
+</script>
+
 </body>
 </html>
