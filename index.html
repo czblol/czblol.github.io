@@ -153,6 +153,13 @@
 </audio>
 <div class="tarco-container">
   <h1>Grow a Tarco</h1>
+
+<audio id="bgm" loop>
+  <source src="music/bgmtarco.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<button onclick="document.getElementById('bgm').play()">▶️ Play Music</button>
   <div class="stats">
     <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
     <button id="bonus-btn" onclick="claimBonus()">🎁 Starter Bonus: +10000 Sheckles</button>
