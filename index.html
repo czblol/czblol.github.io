@@ -421,6 +421,16 @@ window.onload = () => {
   appendMessage('Bot', 'Hello! Welcome to CTT Gaming Studio!');
   appendMessage('Bot', 'Command list: price, ig, 营业时间');
   updateDisplay();
+
+document.addEventListener('click', () => {
+  const audio = document.getElementById('money-sound');
+  if (audio && audio.paused) {
+    audio.play().then(() => {
+      audio.pause(); // 播放一下立刻暂停，解决首次播放延迟
+      audio.currentTime = 0;
+    }).catch(() => {});
+  }
+}, { once: true });
 };
 
 function toggleSellOptions() {
