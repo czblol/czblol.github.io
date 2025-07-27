@@ -328,7 +328,7 @@ function selectItem(name) {
 function buySeed(type, price) {
   if (sheckles >= price) {
     sheckles -= price;
-    inventory.push({ name: `${type}seed` });
+    inventory.push({ type: `${type}seed` }); // ✅ 使用 type 而不是 name
     updateDisplay();
   } else {
     alert('Not enough sheckles!');
