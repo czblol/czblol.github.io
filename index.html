@@ -145,6 +145,26 @@
       height: auto;
       margin-bottom: -6px; /* 图片与文字之间留点距离 */
     }
+.section-heading {
+  text-align: center;
+  color: white;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+#sell-options button {
+  margin: 5px;
+  padding: 8px 14px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#sell-options button:hover {
+  background-color: #218838;
+}
   </style>
 </head>
 <body>
@@ -191,9 +211,9 @@
       </div>
     </div>
   <!-- 新增卖出按钮和选项 -->
-  <h2>Sell</h2>
+<h2 class="section-heading">Sell</h2>
   <button onclick="toggleSellOptions()">🪙 S>
-  <div id="sell-options" style="display: non>
+  <div id="sell-options" style="display: non; margin-top: 10px;">
     <button onclick="sellInventory()">I want>
     <button onclick="sellSelected()">I want >
   </div>
