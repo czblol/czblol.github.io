@@ -328,11 +328,17 @@ function selectItem(name) {
 function buySeed(type, price) {
   if (sheckles >= price) {
     sheckles -= price;
-    inventory.push({ type: `${type}seed` }); // ✅ 使用 type 而不是 name
+    inventory.push({ name: `${type}seed` }); // ✅ 使用 type 而不是 name
     updateDisplay();
   } else {
     alert('Not enough sheckles!');
   }
+}
+
+function updateDisplay() {
+  document.getElementById('sheckles').textContent = sheckles;
+  document.getElementById('seeds').textContent = inventory.filter(i => i.name.includes('seed')).length;
+  ...
 }
 
 function plantSeed(index) {
