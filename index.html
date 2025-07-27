@@ -141,6 +141,7 @@
   <h1>Grow a Tarco</h1>
   <div class="stats">
     <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
+    <button id="bonus-btn" onclick="claimBonus()">🎁 Starter Bonus: +10000 Sheckles</button>
   </div>
   <div class="garden">
     <button class="plot" onclick="plantSeed(0)">Empty</button>
@@ -269,6 +270,17 @@
       updateDisplay();
     }
   }
+
+
+  let sheckles = 0;
+
+  function claimBonus() {
+    sheckles += 10000;
+    updateDisplay();
+    const btn = document.getElementById('bonus-btn');
+    btn.disabled = true;
+    btn.textContent = '✅ Claimed';
+    }
 
   updateDisplay();
 </script>
