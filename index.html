@@ -193,6 +193,10 @@
   Your browser does not support the audio element.
 </audio>
 
+<audio id="money-sound">
+  <source src="music/money.mp3" type="audio/mpeg">
+</audio>
+
 <!-- ✅ stats 内的按钮 -->
 <div class="stats">
   <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
@@ -251,7 +255,20 @@
   <div class="inventory-slot" id="slot4"></div>
 </div>
 <script>
+function playMoneySound() {
+  const audio = document.getElementById('money-sound');
+  if (audio) {
+    audio.currentTime = 0; // 每次都从头播放
+    audio.play();
+  }
+}
+
 let sheckles = 0;
+function updateSheckles(amount) {
+  sheckles += amount;
+  if (amount !== 0) playMoneySound();
+  updateDisplay();
+}
 let seeds = 0;
 const plots = [null, null, null];
 const inventory = [];
@@ -321,7 +338,7 @@ function selectItem(name) {
 
 function buySeed(type, price) {
   if (sheckles >= price) {
-    sheckles -= price;
+    updateSheckles(-price);
     inventory.push({ name: `${type}seed` });
     updateDisplay();
   } else {
@@ -353,13 +370,13 @@ function plantSeed(index) {
     const weight = +(Math.random() * 19.9 + 0.1).toFixed(1);
     inventory.push({ name: fruit, weight });
     plots[index] = null;
-    sheckles += Math.floor(weight * 10);
+    updateSheckles(Math.floor(weight * 10));
     updateDisplay();
   }
 }
 
 function claimBonus() {
-  sheckles += 10000;
+  updateSheckles(10000);
   updateDisplay();
   const btn = document.getElementById('bonus-btn');
   if (btn) {
@@ -420,7 +437,7 @@ function sellInventory() {
       inventory.splice(i, 1);
     }
   }
-  sheckles += total;
+  updateSheckles(total);
   updateDisplay();
   alert(`Sold all fruits for ${total.toFixed(2)} Sheckles`);
 }
@@ -432,7 +449,7 @@ function sellSelected() {
       const item = inventory[index];
       const price = calculateFruitPrice(item.name, item.weight);
       inventory.splice(index, 1);
-      sheckles += price;
+      updateSheckles(price);
       selectedItem = null;
       updateDisplay();
       alert(`Sold one fruit for ${price.toFixed(2)} Sheckles`);
