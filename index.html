@@ -135,11 +135,6 @@
       text-align: center;
       padding: 2px;
     }
-.inventory-slot img {
-  width: 80%;
-  height: auto;
-  margin-bottom: 2px; /* 图片与文字之间留点距离 */
-    }
     .inventory-slot img {
       width: 80%;
       height: auto;
@@ -192,15 +187,18 @@
 </audio>
 <div class="taco-container">
   <h1>Grow a Taco</h1>
+<!-- ✅ 修复后的 audio 区域 -->
 <audio id="bgm" loop>
   <source src="music/bgmtaco.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
-<button onclick="document.getElementById('bgm').play()">▶️ Play Music</button>
-  <div class="stats">
-    <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
-    <button id="bonus-btn" onclick="claimBonus()">🎁 Starter Bonus: +10000 Sheckles</button>
-  </div>
+
+<!-- ✅ stats 内的按钮 -->
+<div class="stats">
+  <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
+  <button id="bonus-btn" onclick="claimBonus()">🎁 Starter Bonus: +10000 Sheckles</button>
+  <button onclick="document.getElementById('bgm').play()">▶️ Play Music</button>
+</div>
   <div class="garden">
     <button class="plot" onclick="plantSeed(0)">Empty</button>
     <button class="plot" onclick="plantSeed(1)">Empty</button>
@@ -261,7 +259,7 @@ let selectedItem = null;
 
 function updateDisplay() {
   document.getElementById('sheckles').textContent = sheckles;
-  document.getElementById('seeds').textContent = inventory.filter(i => i.name.includes('seed')).length;
+  document.getElementById('seeds').textContent = inventory.filter(i => i.name && i.name.includes('seed')).length;
 
   document.querySelectorAll('.plot').forEach((btn, i) => {
     const state = plots[i];
@@ -279,10 +277,7 @@ function updateInventory() {
   const slotMap = {};
 
   inventory.forEach(item => {
-    const key = typeof item === 'string'
-      ? item
-      : item.type + (item.weight || '');
-
+    const key = item.name + (item.weight || '');
     if (!slotMap[key]) slotMap[key] = [];
     slotMap[key].push(item);
   });
@@ -294,7 +289,7 @@ function updateInventory() {
 
     if (items.length > 0) {
       const item = items[0];
-      const name = typeof item === 'string' ? item : item.type;
+      const name = item.name;
       const isSeed = name.includes('seed');
       const imgPath = isSeed
         ? `images/seeds/${name}.png`
@@ -321,24 +316,17 @@ function capitalize(str) {
 }
 
 function selectItem(name) {
-  if (name.includes('seed')) selectedItem = name;
-  else selectedItem = null;
+  selectedItem = name;
 }
 
 function buySeed(type, price) {
   if (sheckles >= price) {
     sheckles -= price;
-    inventory.push({ name: `${type}seed` }); // ✅ 使用 type 而不是 name
+    inventory.push({ name: `${type}seed` });
     updateDisplay();
   } else {
     alert('Not enough sheckles!');
   }
-}
-
-function updateDisplay() {
-  document.getElementById('sheckles').textContent = sheckles;
-  document.getElementById('seeds').textContent = inventory.filter(i => i.name.includes('seed')).length;
-  ...
 }
 
 function plantSeed(index) {
@@ -362,10 +350,10 @@ function plantSeed(index) {
     }
   } else if (plots[index]?.stage === 2) {
     const fruit = plots[index].type;
-    const weight = +(Math.random() * 19.9 + 0.1).toFixed(1); // 0.1kg - 20kg
+    const weight = +(Math.random() * 19.9 + 0.1).toFixed(1);
     inventory.push({ name: fruit, weight });
     plots[index] = null;
-    sheckles += Math.floor(weight * 10); // 可自调公式
+    sheckles += Math.floor(weight * 10);
     updateDisplay();
   }
 }
@@ -374,8 +362,10 @@ function claimBonus() {
   sheckles += 10000;
   updateDisplay();
   const btn = document.getElementById('bonus-btn');
-  btn.disabled = true;
-  btn.textContent = '✅ Claimed';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '✅ Claimed';
+  }
 }
 
 const chatBox = document.getElementById('chat-box');
@@ -425,7 +415,7 @@ function sellInventory() {
   let total = 0;
   for (let i = inventory.length - 1; i >= 0; i--) {
     const item = inventory[i];
-    if (typeof item === 'object' && item.name && !item.name.includes('seed')) {
+    if (item.name && !item.name.includes('seed')) {
       total += calculateFruitPrice(item.name, item.weight);
       inventory.splice(i, 1);
     }
@@ -459,19 +449,18 @@ function calculateFruitPrice(fruitName, weight) {
 
   switch (fruitName) {
     case 'apple':
-      pricePerKg = 347; // 每公斤 90 Sheckles
+      pricePerKg = 347;
       break;
     case 'banana':
-      pricePerKg = 1579; // 每公斤 180 Sheckles
+      pricePerKg = 1579;
       break;
     case 'sugarapple':
-      pricePerKg = 6700; // 每公斤 6700 Sheckles
+      pricePerKg = 6700;
       break;
     default:
-      pricePerKg = 50; // 默认价（防止出错）
+      pricePerKg = 50;
   }
 
-  // 返回总价，保留一位小数
   return Math.round(pricePerKg * weight);
 }
 </script>
