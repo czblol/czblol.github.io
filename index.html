@@ -272,15 +272,13 @@
   }
 
 
-  let sheckles = 0;
-
   function claimBonus() {
     sheckles += 10000;
     updateDisplay();
     const btn = document.getElementById('bonus-btn');
     btn.disabled = true;
     btn.textContent = '✅ Claimed';
-    }
+  }
 
   updateDisplay();
 </script>
