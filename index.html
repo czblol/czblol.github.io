@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="en">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chat Bot + Grow a Tarco</title>
@@ -154,42 +155,41 @@
   <div class="shop">
     <h2>Seed Shop</h2>
     <div class="shop-item">
-      <img src="images/fruits/apple.png" class="seed-img" alt="Apple Seed">
+      <img src="images/seeds/appleseed.png" class="seed-img" alt="Apple Seed">
       <div class="item-info">
         <p>🍎 Apple Seed - 3250 Sheckles</p>
-        <button onclick="buySeed('appleseed', 3250)">Buy</button>
+        <button onclick="buySeed('apple', 3250)">Buy</button>
       </div>
     </div>
     <div class="shop-item">
-      <img src="images/fruits/banana.png" class="seed-img" alt="Banana Seed">
+      <img src="images/seeds/bananaseed.png" class="seed-img" alt="Banana Seed">
       <div class="item-info">
         <p>🍌 Banana Seed - 7000 Sheckles</p>
-        <button onclick="buySeed('bananaseed', 7000)">Buy</button>
+        <button onclick="buySeed('banana', 7000)">Buy</button>
       </div>
     </div>
     <div class="shop-item">
-      <img src="images/fruits/sugarapple.png" class="seed-img" alt="Sugar Apple Seed">
+      <img src="images/seeds/sugarappleseed.png" class="seed-img" alt="Sugar Apple Seed">
       <div class="item-info">
         <p>🍈 Sugar Apple Seed - 25000000 Sheckles</p>
-        <button onclick="buySeed('sugarappleseed', 25000000)">Buy</button>
+        <button onclick="buySeed('sugarapple', 25000000)">Buy</button>
       </div>
     </div>
   </div>
 </div>
-<!-- 后续内容略，脚本保留不动 -->
-<div class="container">  
-  <div id="chat-box"></div>  
-  <input type="text" id="user-input" placeholder="Type a message..." />  
-  <button id="send-btn">Send</button>  
-  <iframe src="dino-game/index.html" height="300px"></iframe>  
-</div>  
-<div class="inventory-bar">  
-  <div class="inventory-slot" id="slot0"></div>  
-  <div class="inventory-slot" id="slot1"></div>  
-  <div class="inventory-slot" id="slot2"></div>  
-  <div class="inventory-slot" id="slot3"></div>  
-  <div class="inventory-slot" id="slot4"></div>  
-</div>  
+<div class="container">
+  <div id="chat-box"></div>
+  <input type="text" id="user-input" placeholder="Type a message..." />
+  <button id="send-btn">Send</button>
+  <iframe src="dino-game/index.html" height="300px"></iframe>
+</div>
+<div class="inventory-bar">
+  <div class="inventory-slot" id="slot0"></div>
+  <div class="inventory-slot" id="slot1"></div>
+  <div class="inventory-slot" id="slot2"></div>
+  <div class="inventory-slot" id="slot3"></div>
+  <div class="inventory-slot" id="slot4"></div>
+</div>
 <script>
 let sheckles = 0;
 let seeds = 0;
@@ -199,7 +199,8 @@ let selectedItem = null;
 
 function updateDisplay() {
   document.getElementById('sheckles').textContent = sheckles;
-  document.getElementById('seeds').textContent = inventory.filter(i => i.includes('seed')).length;
+  document.getElementById('seeds').textContent = inventory.filter(i => i.name.includes('seed')).length;
+
   document.querySelectorAll('.plot').forEach((btn, i) => {
     const state = plots[i];
     btn.textContent = state === null ? 'Empty' :
@@ -207,36 +208,60 @@ function updateDisplay() {
       state.stage === 1 ? 'Growing 🌿' :
       'Harvest 🍅';
   });
+
   updateInventory();
 }
 
 function updateInventory() {
-  for (let i = 0; i < 5; i++) {
+  const slotCount = 5;
+  const slotMap = {};
+
+  inventory.forEach(item => {
+    const key = item.name + (item.weight ? `_${item.weight}` : '');
+    if (!slotMap[key]) slotMap[key] = [];
+    slotMap[key].push(item);
+  });
+
+  const entries = Object.entries(slotMap);
+  for (let i = 0; i < slotCount; i++) {
     const slot = document.getElementById(`slot${i}`);
-    const item = inventory[i];
-    if (item) {
-      const imgPath = item.includes('seed')
-        ? `images/seeds/${item}.png`
-        : `images/fruits/${item}.png`;
-      slot.innerHTML = `<img src="${imgPath}" alt="${item}" onclick="selectItem('${item}')">`;
+    const [key, items] = entries[i] || [null, []];
+
+    if (items.length > 0) {
+      const item = items[0];
+      const imgPath = item.name.includes('seed')
+        ? `images/seeds/${item.name}.png`
+        : `images/fruits/${item.name}.png`;
+
+      const label = item.name.includes('seed')
+        ? `${capitalize(item.name)} ×${items.length}`
+        : `${capitalize(item.name)} [${item.weight.toFixed(1)} kg]`;
+
+      slot.innerHTML = `
+        <div onclick="selectItem('${item.name}')">
+          <img src="${imgPath}" alt="${item.name}">
+          <div style="font-size: 10px; text-align: center;">${label}</div>
+        </div>
+      `;
     } else {
       slot.innerHTML = '';
     }
   }
 }
 
-function selectItem(itemName) {
-  if (itemName.includes('seed')) {
-    selectedItem = itemName;
-  } else {
-    selectedItem = null; // 防止选中水果去种
-  }
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function selectItem(name) {
+  if (name.includes('seed')) selectedItem = name;
+  else selectedItem = null;
 }
 
 function buySeed(type, price) {
   if (sheckles >= price) {
     sheckles -= price;
-    inventory.push(type); // 添加如 'appleseed'
+    inventory.push({ name: `${type}seed` });
     updateDisplay();
   } else {
     alert('Not enough sheckles!');
@@ -245,26 +270,29 @@ function buySeed(type, price) {
 
 function plantSeed(index) {
   if (plots[index] === null && selectedItem && selectedItem.includes('seed')) {
-    const cropType = selectedItem.replace('seed', '');
-    plots[index] = { stage: 0, type: cropType };
-    inventory.splice(inventory.indexOf(selectedItem), 1);
-    selectedItem = null;
-    updateDisplay();
-
-    setTimeout(() => {
-      plots[index].stage = 1;
+    const itemIndex = inventory.findIndex(i => i.name === selectedItem);
+    if (itemIndex !== -1) {
+      const cropType = selectedItem.replace('seed', '');
+      plots[index] = { stage: 0, type: cropType };
+      inventory.splice(itemIndex, 1);
+      selectedItem = null;
       updateDisplay();
-      setTimeout(() => {
-        plots[index].stage = 2;
-        updateDisplay();
-      }, 3000);
-    }, 3000);
 
+      setTimeout(() => {
+        plots[index].stage = 1;
+        updateDisplay();
+        setTimeout(() => {
+          plots[index].stage = 2;
+          updateDisplay();
+        }, 3000);
+      }, 3000);
+    }
   } else if (plots[index]?.stage === 2) {
-    const fruit = plots[index].type; // 例如 'apple'
-    inventory.push(fruit); // 添加如 'apple' ，不带 seed
+    const fruit = plots[index].type;
+    const weight = +(Math.random() * 29.9 + 0.1).toFixed(1); // 0.1kg - 30kg
+    inventory.push({ name: fruit, weight });
     plots[index] = null;
-    sheckles += 20;
+    sheckles += Math.floor(weight * 10); // 可自调公式
     updateDisplay();
   }
 }
@@ -315,5 +343,5 @@ window.onload = () => {
   updateDisplay();
 };
 </script>
-</body>    
-</html> 
+</body>
+</html>
