@@ -153,6 +153,14 @@
 </audio>
 <div class="tarco-container">
   <h1>Grow a Tarco</h1>
+  <!-- 新增卖出按钮和选项 -->
+  <h2>Sell</h2>
+  <button onclick="toggleSellOptions()">🪙 Sell Options</button>
+  <div id="sell-options" style="display: none; margin-top: 10px;">
+    <button onclick="sellInventory()">I want to sell my inventory</button>
+    <button onclick="sellSelected()">I want to sell this</button>
+  </div>
+</div>
 
 <audio id="bgm" loop>
   <source src="music/bgmtarco.mp3" type="audio/mpeg">
@@ -234,7 +242,10 @@ function updateInventory() {
   const slotMap = {};
 
   inventory.forEach(item => {
-    const key = item.name + (item.weight ? `_${item.weight}` : '');
+    const key = typeof item === 'string'
+      ? item
+      : item.type + (item.weight || '');
+
     if (!slotMap[key]) slotMap[key] = [];
     slotMap[key].push(item);
   });
@@ -246,18 +257,20 @@ function updateInventory() {
 
     if (items.length > 0) {
       const item = items[0];
-      const imgPath = item.name.includes('seed')
-        ? `images/seeds/${item.name}.png`
-        : `images/fruits/${item.name}.png`;
+      const name = typeof item === 'string' ? item : item.type;
+      const isSeed = name.includes('seed');
+      const imgPath = isSeed
+        ? `images/seeds/${name}.png`
+        : `images/fruits/${name}.png`;
 
-      const label = item.name.includes('seed')
-        ? `${capitalize(item.name)} ×${items.length}`
-        : `${capitalize(item.name)} [${item.weight.toFixed(1)} kg]`;
+      const label = isSeed
+        ? `${capitalize(name)} ×${items.length}`
+        : `${capitalize(name)} [${item.weight}kg]`;
 
       slot.innerHTML = `
-        <div onclick="selectItem('${item.name}')">
-          <img src="${imgPath}" alt="${item.name}">
-          <div style="font-size: 10px; text-align: center;">${label}</div>
+        <div style="text-align:center;" onclick="selectItem('${name}')">
+          <img src="${imgPath}" alt="${name}" style="width: 80%;">
+          <div style="font-size: 10px; margin-top: -2px;">${label}</div>
         </div>
       `;
     } else {
@@ -266,6 +279,9 @@ function updateInventory() {
   }
 }
 
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -306,7 +322,7 @@ function plantSeed(index) {
     }
   } else if (plots[index]?.stage === 2) {
     const fruit = plots[index].type;
-    const weight = +(Math.random() * 29.9 + 0.1).toFixed(1); // 0.1kg - 30kg
+    const weight = +(Math.random() * 19.9 + 0.1).toFixed(1); // 0.1kg - 20kg
     inventory.push({ name: fruit, weight });
     plots[index] = null;
     sheckles += Math.floor(weight * 10); // 可自调公式
@@ -359,6 +375,65 @@ window.onload = () => {
   appendMessage('Bot', 'Command list: price, ig, 营业时间');
   updateDisplay();
 };
+
+function toggleSellOptions() {
+  const sellDiv = document.getElementById('sell-options');
+  sellDiv.style.display = sellDiv.style.display === 'none' ? 'block' : 'none';
+}
+
+function sellInventory() {
+  let total = 0;
+  for (let i = inventory.length - 1; i >= 0; i--) {
+    const item = inventory[i];
+    if (!item.includes('seed')) {
+      const weight = parseFloat(item.split('[')[1]?.replace('kg]', '') || 0);
+      if (!isNaN(weight)) {
+        total += calculateFruitPrice(weight);
+      }
+      inventory.splice(i, 1);
+    }
+  }
+  sheckles += total;
+  updateDisplay();
+  alert(`Sold all fruits for ${total.toFixed(2)} Sheckles`);
+}
+
+function sellSelected() {
+  if (selectedItem && !selectedItem.includes('seed')) {
+    const weight = parseFloat(selectedItem.split('[')[1]?.replace('kg]', '') || 0);
+    if (!isNaN(weight)) {
+      const price = calculateFruitPrice(weight);
+      inventory.splice(inventory.indexOf(selectedItem), 1);
+      sheckles += price;
+      selectedItem = null;
+      updateDisplay();
+      alert(`Sold one fruit for ${price.toFixed(2)} Sheckles`);
+    }
+  } else {
+    alert('Please click on a fruit in your inventory first!');
+  }
+}
+
+function calculateFruitPrice(fruitName, weight) {
+  let pricePerKg = 0;
+
+  switch (fruitName) {
+    case 'apple':
+      pricePerKg = 347; // 每公斤 90 Sheckles
+      break;
+    case 'banana':
+      pricePerKg = 1579; // 每公斤 180 Sheckles
+      break;
+    case 'sugarapple':
+      pricePerKg = 6700; // 每公斤 6700 Sheckles
+      break;
+    default:
+      pricePerKg = 50; // 默认价（防止出错）
+  }
+
+  // 返回总价，保留一位小数
+  return Math.round(pricePerKg * weight);
+}
 </script>
 </body>
 </html>
