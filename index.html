@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,134 +9,154 @@
       margin: 0;
       padding: 0;
       background-color: #f0f0f0;
-    }
+    }.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+#chat-box {
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-    #chat-box {
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+.message {
+  margin-bottom: 10px;
+}
 
-    .message {
-      margin-bottom: 10px;
-    }
+#user-input {
+  width: calc(100% - 60px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-    #user-input {
-      width: calc(100% - 60px);
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+#send-btn {
+  width: 50px;
+  padding: 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    #send-btn {
-      width: 50px;
-      padding: 8px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+iframe {
+  width: 100%;
+  border: none;
+  margin-top: 20px;
+}
 
-    iframe {
-      width: 100%;
-      border: none;
-      margin-top: 20px;
-    }
+.tarco-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-image: url('images/wood.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: #fff;
+}
 
-    .tarco-container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      background-image: url('images/wood.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      color: #fff;
-    }
+.tarco-container h1 {
+  text-align: center;
+}
 
-    .tarco-container h1 {
-      text-align: center;
-    }
+.stats {
+  text-align: center;
+  font-weight: bold;
+}
 
-    .stats {
-      text-align: center;
-      font-weight: bold;
-    }
+.garden {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
 
-    .garden {
-      display: flex;
-      justify-content: space-around;
-      margin: 20px 0;
-    }
+.plot {
+  width: 100px;
+  height: 100px;
+  font-size: 16px;
+  background-color: #d9fcd9;
+  border: 2px solid #6c6;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
-    .plot {
-      width: 100px;
-      height: 100px;
-      font-size: 16px;
-      background-color: #d9fcd9;
-      border: 2px solid #6c6;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+.shop {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .shop {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.shop-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-    .shop-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+.seed-img {
+  width: 50px;
+  margin-right: 10px;
+}
 
-    .seed-img {
-      width: 50px;
-      margin-right: 10px;
-    }
+.shop button {
+  margin-top: 5px;
+  padding: 6px 14px;
+  background-color: #ffa500;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .shop button {
-      margin-top: 5px;
-      padding: 6px 14px;
-      background-color: #ffa500;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.inventory-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border-top: 2px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.inventory-slot {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #aaa;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.inventory-slot img {
+  width: 80%;
+  height: auto;
+}
+
   </style>
 </head>
-<body>
-
-<!-- 背景音乐 -->
-<button onclick="document.getElementById('bgm').play()">Play Music</button>
-<audio id="bgm" loop>
+<body><audio id="bgm" loop>
   <source src="music/bgmtarco.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-<!-- 可选播放按钮 -->
-<!-- <button onclick="document.getElementById('bgm').play()">🎵 播放音乐</button> -->
-
-<!-- Grow a Tarco 游戏 -->
-<div class="tarco-container">
+</audio><div class="tarco-container">
   <h1>Grow a Tarco</h1>
   <div class="stats">
     <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
@@ -150,43 +169,40 @@
   </div>
   <div class="shop">
     <h2>Seed Shop</h2>
-
     <div class="shop-item">
       <img src="images/Apple.png" class="seed-img" alt="Apple Seed">
       <div class="item-info">
         <p>🍎 Apple Seed - 3250 Sheckles</p>
-        <button onclick="buyApple()">Buy</button>
+        <button onclick="buyAppleSeed()">Buy</button>
       </div>
     </div>
-
     <div class="shop-item">
       <img src="images/banana.png" class="seed-img" alt="Banana Seed">
       <div class="item-info">
         <p>🍌 Banana Seed - 7000 Sheckles</p>
-        <button onclick="buyBanana()">Buy</button>
+        <button onclick="buyBananaSeed()">Buy</button>
       </div>
     </div>
-
     <div class="shop-item">
-      <img src="images/sugarapple.png" class="seed-img" alt="Orange Seed">
+      <img src="images/sugarapple.png" class="seed-img" alt="Sugar Apple Seed">
       <div class="item-info">
         <p>🍈 Sugar Apple Seed - 25000000 Sheckles</p>
-        <button onclick="buySugarApple()">Buy</button>
+        <button onclick="buySugarAppleSeed()">Buy</button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Chatbot + Dino Game -->
-<div class="container">
+</div><div class="container">
   <div id="chat-box"></div>
   <input type="text" id="user-input" placeholder="Type a message..." />
   <button id="send-btn">Send</button>
   <iframe src="dino-game/index.html" height="300px"></iframe>
-</div>
-
-<script>
-  // 聊天机器人逻辑
+</div><div class="inventory-bar">
+  <div class="inventory-slot" id="slot0"></div>
+  <div class="inventory-slot" id="slot1"></div>
+  <div class="inventory-slot" id="slot2"></div>
+  <div class="inventory-slot" id="slot3"></div>
+  <div class="inventory-slot" id="slot4"></div>
+</div><script>
   const chatBox = document.getElementById('chat-box');
   const userInput = document.getElementById('user-input');
   const sendBtn = document.getElementById('send-btn');
@@ -224,10 +240,11 @@
     appendMessage('Bot', 'Command list: price, ig, 营业时间');
   };
 
-  // 游戏逻辑
   let sheckles = 0;
   let seeds = 0;
   const plots = [null, null, null];
+  const inventory = [];
+  let selectedItem = null;
 
   function updateDisplay() {
     document.getElementById('sheckles').textContent = sheckles;
@@ -239,43 +256,33 @@
         state.stage === 1 ? 'Growing 🌿' :
         'Harvest 🍅';
     });
+    updateInventory();
   }
 
-  function buyApple() {
-  if (sheckles >= 3250) {
-    sheckles -= 3250;
-    seeds += 1;
-    updateDisplay();
-  } else {
-    alert('Not enough sheckles!');
+  function updateInventory() {
+    for (let i = 0; i < 5; i++) {
+      const slot = document.getElementById(`slot${i}`);
+      const item = inventory[i];
+      if (item) {
+        slot.innerHTML = `<img src="images/${item}.png" alt="${item}" onclick="selectItem('${item}')">`;
+      } else {
+        slot.innerHTML = '';
+      }
+    }
   }
-}
 
-function buyBanana() {
-  if (sheckles >= 7000) {
-    sheckles -= 7000;
-    seeds += 1;
-    updateDisplay();
-  } else {
-    alert('Not enough sheckles!');
+  function selectItem(itemName) {
+    selectedItem = itemName;
   }
-}
-
-function buySugarApple() {
-  if (sheckles >= 25000000) {
-    sheckles -= 25000000;
-    seeds += 1;
-    updateDisplay();
-  } else {
-    alert('Not enough sheckles!');
-  }
-}
 
   function plantSeed(index) {
-    if (plots[index] === null && seeds > 0) {
-      plots[index] = { stage: 0 };
-      seeds--;
+    if (plots[index] === null && selectedItem) {
+      plots[index] = { stage: 0, type: selectedItem };
+      const idx = inventory.indexOf(selectedItem);
+      if (idx !== -1) inventory.splice(idx, 1);
+      selectedItem = null;
       updateDisplay();
+
       setTimeout(() => {
         plots[index].stage = 1;
         updateDisplay();
@@ -285,12 +292,43 @@ function buySugarApple() {
         }, 3000);
       }, 3000);
     } else if (plots[index]?.stage === 2) {
+      const fruit = plots[index].type;
+      inventory.push(fruit);
       plots[index] = null;
       sheckles += 20;
       updateDisplay();
     }
   }
 
+  function buyAppleSeed() {
+    if (sheckles >= 3250) {
+      sheckles -= 3250;
+      inventory.push('Apple');
+      updateDisplay();
+    } else {
+      alert('Not enough sheckles!');
+    }
+  }
+
+  function buyBananaSeed() {
+    if (sheckles >= 7000) {
+      sheckles -= 7000;
+      inventory.push('banana');
+      updateDisplay();
+    } else {
+      alert('Not enough sheckles!');
+    }
+  }
+
+  function buySugarAppleSeed() {
+    if (sheckles >= 25000000) {
+      sheckles -= 25000000;
+      inventory.push('sugarapple');
+      updateDisplay();
+    } else {
+      alert('Not enough sheckles!');
+    }
+  }
 
   function claimBonus() {
     sheckles += 10000;
@@ -301,7 +339,5 @@ function buySugarApple() {
   }
 
   updateDisplay();
-</script>
-
-</body>
+</script></body>
 </html>
