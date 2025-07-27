@@ -319,9 +319,6 @@ function updateInventory() {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 function selectItem(name) {
   if (name.includes('seed')) selectedItem = name;
@@ -422,11 +419,8 @@ function sellInventory() {
   let total = 0;
   for (let i = inventory.length - 1; i >= 0; i--) {
     const item = inventory[i];
-    if (!item.includes('seed')) {
-      const weight = parseFloat(item.split('[')[1]?.replace('kg]', '') || 0);
-      if (!isNaN(weight)) {
-        total += calculateFruitPrice(weight);
-      }
+    if (typeof item === 'object' && item.name && !item.name.includes('seed')) {
+      total += calculateFruitPrice(item.name, item.weight);
       inventory.splice(i, 1);
     }
   }
@@ -437,14 +431,17 @@ function sellInventory() {
 
 function sellSelected() {
   if (selectedItem && !selectedItem.includes('seed')) {
-    const weight = parseFloat(selectedItem.split('[')[1]?.replace('kg]', '') || 0);
-    if (!isNaN(weight)) {
-      const price = calculateFruitPrice(weight);
-      inventory.splice(inventory.indexOf(selectedItem), 1);
+    const index = inventory.findIndex(item => item.name === selectedItem && item.weight);
+    if (index !== -1) {
+      const item = inventory[index];
+      const price = calculateFruitPrice(item.name, item.weight);
+      inventory.splice(index, 1);
       sheckles += price;
       selectedItem = null;
       updateDisplay();
       alert(`Sold one fruit for ${price.toFixed(2)} Sheckles`);
+    } else {
+      alert('Fruit not found in inventory!');
     }
   } else {
     alert('Please click on a fruit in your inventory first!');
