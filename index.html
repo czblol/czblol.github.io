@@ -410,7 +410,7 @@ sendBtn.onclick = () => {
 function getBotReply(msg) {
   switch (msg.toLowerCase()) {
     case '联机': return '不久将来,应该不可能开启联机功能,敬请期待。 ';
-    case 'Top up': return 'nimeiyoumoney';
+    case 'Topup': return 'top up system ended';
     case '关于': return '🌮 Grow A Taco：GAG Mini Version 迷你版 Grow A Garden 种植游戏！ 在这个轻量又有趣的网页游戏里，你将：🌱 购买种子，种植水果🍅 等待成长，收获果实,💰 出售收成，赚取 Sheckles,📦 物品栏系统，实时管理库存 快速种、快速玩、快速赚！适合所有想在几分钟内轻松体验种植乐趣的玩家！';
     case '再见': return '再见！';
     default: return 'Command not found (try: price, ig)';
@@ -419,7 +419,7 @@ function getBotReply(msg) {
 
 window.onload = () => {
   appendMessage('Bot', 'Hello! Welcome to Grow a Taco!');
-  appendMessage('Bot', 'Command list: 联机,Top up,关于');
+  appendMessage('Bot', 'Command list: 联机,Topup,关于');
   updateDisplay();
 
 document.addEventListener('click', () => {
