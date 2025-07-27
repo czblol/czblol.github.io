@@ -155,7 +155,7 @@
       <img src="images/Apple.png" class="seed-img" alt="Apple Seed">
       <div class="item-info">
         <p>🍎 Apple Seed - 3250 Sheckles</p>
-        <button onclick="buySeed()">Buy</button>
+        <button onclick="buyApple()">Buy</button>
       </div>
     </div>
 
@@ -163,7 +163,7 @@
       <img src="images/banana.png" class="seed-img" alt="Banana Seed">
       <div class="item-info">
         <p>🍌 Banana Seed - 7000 Sheckles</p>
-        <button onclick="buySeed()">Buy</button>
+        <button onclick="buyBanana()">Buy</button>
       </div>
     </div>
 
@@ -171,7 +171,7 @@
       <img src="images/sugarapple.png" class="seed-img" alt="Orange Seed">
       <div class="item-info">
         <p>🍈 Sugar Apple Seed - 25000000 Sheckles</p>
-        <button onclick="buySeed()">Buy</button>
+        <button onclick="buySugarApple()">Buy</button>
       </div>
     </div>
   </div>
@@ -241,15 +241,35 @@
     });
   }
 
-  function buySeed() {
-    if (sheckles >= 10) {
-      sheckles -= 10;
-      seeds += 1;
-      updateDisplay();
-    } else {
-      alert('Not enough sheckles!');
-    }
+  function buyApple() {
+  if (sheckles >= 3250) {
+    sheckles -= 3250;
+    seeds += 1;
+    updateDisplay();
+  } else {
+    alert('Not enough sheckles!');
   }
+}
+
+function buyBanana() {
+  if (sheckles >= 7000) {
+    sheckles -= 7000;
+    seeds += 1;
+    updateDisplay();
+  } else {
+    alert('Not enough sheckles!');
+  }
+}
+
+function buySugarApple() {
+  if (sheckles >= 25000000) {
+    sheckles -= 25000000;
+    seeds += 1;
+    updateDisplay();
+  } else {
+    alert('Not enough sheckles!');
+  }
+}
 
   function plantSeed(index) {
     if (plots[index] === null && seeds > 0) {
