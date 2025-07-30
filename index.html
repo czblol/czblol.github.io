@@ -229,18 +229,6 @@
   <source src="music/money.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 设置按钮 -->
-<button id="settings-button">⚙️</button>
-
-<!-- 设置面板 -->
-<div id="settings-panel" style="display: none;">
-  <h3>Settings</h3>
-  <label>Redeem Code: </label>
-  <input type="text" id="redeem-code-input" placeh>
-  <button id="redeem-code-button">Redeem</button>
-  <p id="redeem-message"></p>
-</div>
-
 <!-- ✅ stats 内的按钮 -->
 <div class="stats">
   <p>Sheckles: <span id="sheckles">0</span> | Seeds: <span id="seeds">0</span></p>
@@ -297,6 +285,33 @@
   <div class="inventory-slot" id="slot2"></div>
   <div class="inventory-slot" id="slot3"></div>
   <div class="inventory-slot" id="slot4"></div>
+</div>
+<!-- Settings Button -->
+<button id="settings-button" style="
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+">⚙️</button>
+
+<!-- Settings Panel -->
+<div id="settings-panel" style="
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+">
+  <h3>Settings</h3>
+  <label>Redeem Code:</label>
+  <input type="text" id="redeem-code-input" placeholder="Enter redeem code">
+  <button id="redeem-code-button">Redeem</button>
+  <p id="redeem-message"></p>
 </div>
 <script>
 function playMoneySound() {
@@ -562,12 +577,11 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
   }
 
   if (input === code) {
-    sheklesCounter += reward;
+    updateSheckles(reward); // ✅ 用函数更新
     localStorage.setItem("redeemed_" + code, "true");
-    updateSheklesDisplay(); // 更新UI显示
-    message.textContent = `Redeemed successfully! You received ${reward.toLocaleString()} Shekles`;
+    message.textContent = `Successfully redeemed! You received ${reward.toLocaleString()} Sheckles.`;
   } else {
-    message.textContent = "invalid code";
+    message.textContent = "Invalid redeem code.";
   }
 });
 </script>
