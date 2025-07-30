@@ -651,13 +651,13 @@ function renderGame() {
 
 // 自动保存
 setInterval(() => {
-  localStorage.setItem('tarcoSave', JSON.stringify(gameState));
+  localStorage.setItem('tacoSave', JSON.stringify(gameState));
   console.log('✅ 自动存档完成');
 }, 10000);
 
 // 启动读取存档
 window.addEventListener('load', () => {
-  const saved = localStorage.getItem('tarcoSave');
+  const saved = localStorage.getItem('tacoSave');
   if (saved) {
     const data = JSON.parse(saved);
     gameState.coins = data.coins || 0;
