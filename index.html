@@ -218,6 +218,37 @@
   <source src="music/bgmtaco.mp3" type="audio/mpeg">
 </audio>
 <div class="taco-container">
+<div id="taco-container" style="position: relative;">
+  <!-- 设置按钮 -->
+  <button id="settings-button" style="
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+  ">⚙️</button>
+
+  <!-- 设置面板 -->
+  <div id="settings-panel" style="
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    display: none;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 10;
+    width: 200px;
+  ">
+    <h3>Settings</h3>
+    <label>Redeem Code:</label><br>
+    <input type="text" id="redeem-code-input" placeholder="Enter code" style="width: 100%;"><br><br>
+    <button id="redeem-code-button">Redeem</button>
+    <p id="redeem-message"></p>
+  </div>
+</div>
+
   <h1>Grow a Taco</h1>
 <!-- ✅ 修复后的 audio 区域 -->
 <audio id="bgm" loop>
@@ -263,35 +294,6 @@
         <button onclick="buySeed('sugarapple', 25000000)">Buy</button>
       </div>
     </div>
-<div id="taco-container" style="position: relative;">
-  <!-- 设置按钮 -->
-  <button id="settings-button" style="
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-  ">⚙️</button>
-
-  <!-- 设置面板 -->
-  <div id="settings-panel" style="
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    display: none;
-    background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    z-index: 10;
-    width: 200px;
-  ">
-    <h3>Settings</h3>
-    <label>Redeem Code:</label><br>
-    <input type="text" id="redeem-code-input" placeholder="Enter code" style="width: 100%;"><br><br>
-    <button id="redeem-code-button">Redeem</button>
-    <p id="redeem-message"></p>
-  </div>
 </div>
 <h2 class="section-heading">Sell</h2>
 <button onclick="toggleSellOptions()" class="sell-toggle-btn">🪙 Sell Options</button>
