@@ -221,42 +221,46 @@
 <audio id="bgm" loop>
   <source src="music/bgmtaco.mp3" type="audio/mpeg">
 </audio>
-<div class="taco-container">
-<div id="taco-container" style="position: relative;">
+<div class="taco-container" style="position: relative;">
   <!-- 设置按钮 -->
   <button id="settings-button" style="
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 10;
+    z-index: 1000;
   ">⚙️</button>
 
   <!-- 设置面板 -->
-<div id="settings-panel" style="
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  display: none;
-  background: white;
-  color: black;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  z-index: 9999;
-  min-height: 100px;
-  min-width: 150px;
-">
-</div>
+  <div id="settings-panel" style="
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    display: none;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 999;
+    min-width: 180px;
+  ">
+<div class="taco-container">
+  <!-- 设置按钮 -->
+  <button id="settings-button">⚙️</button>
+
+  <!-- 设置面板 -->
+  <div id="settings-panel">
     <h3>Settings</h3>
     <label>Redeem Code:</label><br>
-    <input type="text" id="redeem-code-input" placeholder="Enter code" style="width: 100%;"><br><br>
+    <input type="text" id="redeem-code-input" placeholder="Enter code">
     <button id="redeem-code-button">Redeem</button>
     <p id="redeem-message"></p>
   </div>
-</div>
 
+  <!-- 游戏标题 -->
   <h1>Grow a Taco</h1>
+
 <!-- ✅ 修复后的 audio 区域 -->
 <audio id="bgm" loop>
   <source src="music/bgmtaco.mp3" type="audio/mpeg">
@@ -571,6 +575,9 @@ document.querySelectorAll('.inventory-slot').forEach(slot => {
   });
 });
 
+// 默认隐藏面板（也可用 CSS 控制）
+document.getElementById("settings-panel").style.display = "none";
+
 document.getElementById("settings-button").addEventListener("click", () => {
   const panel = document.getElementById("settings-panel");
   panel.style.display = panel.style.display === "none" ? "block" : "none";
@@ -589,9 +596,9 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
   }
 
   if (input === code) {
-    updateSheckles(reward); // ✅ 用函数更新
+    updateSheckles(reward); // ✅ 奖励金币
     localStorage.setItem("redeemed_" + code, "true");
-    message.textContent = `Successfully redeemed! You received ${reward.toLocaleString()} Sheckles.`;
+    message.textContent = `Successfully redeemed! You received ${reward.toLocaleString()}`;
   } else {
     message.textContent = "Invalid redeem code.";
   }
