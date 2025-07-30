@@ -179,6 +179,11 @@
   width: 80%;
   max-width: 300px;
 }
+
+.inventory-slot.selected {
+  border: 3px solid limegreen;
+  box-sizing: border-box;
+}
   </style>
 </head>
 <body>
@@ -490,6 +495,15 @@ function calculateFruitPrice(fruitName, weight) {
 
   return Math.round(pricePerKg * weight);
 }
+
+document.querySelectorAll('.inventory-slot').forEach(slot => {
+  slot.addEventListener('click', () => {
+    // 移除所有格子的选中状态
+    document.querySelectorAll('.inventory-slot').forEach(s => s.classList.remove('selected'));
+    // 添加当前点击的格子的选中状态
+    slot.classList.add('selected');
+  });
+});
 </script>
 </body>
 </html>
