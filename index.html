@@ -604,7 +604,35 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
     message.textContent = "Invalid redeem code.";
   }
 });
+
+// 自动保存（每10秒）
+setInterval(() => {
+  const saveData = {
+    coins: gameState.coins,
+    fruits: gameState.fruits,
+    seeds: gameState.seeds,
+    landPlots: gameState.landPlots,
+  };
+  localStorage.setItem('tarcoSave', JSON.stringify(saveData));
+  console.log('✅ 自动存档完成');
+}, 10000); // 每10秒存一次
+
+// 启动时读取存档
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('tarcoSave');
+  if (saved) {
+    const data = JSON.parse(saved);
+    gameState.coins = data.coins || 0;
+    gameState.fruits = data.fruits || {};
+    gameState.seeds = data.seeds || {};
+    gameState.landPlots = data.landPlots || [];
+    // 调用你的渲染函数
+    renderGame();
+    console.log('🗃️ 存档已恢复');
+  }
+});
 </script>
 </body>
 </html>
+
 
