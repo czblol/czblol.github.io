@@ -201,23 +201,20 @@
 }
 
 #settings-panel {
-  position: fixed;
-  bottom: 70px;
-  right: 20px;
-  background: #fff;
-  border: 2px solid #ccc;
-  padding: 15px;
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 100px;
+  min-width: 150px;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  display: none;
   border-radius: 10px;
-  z-index: 1000;
-  width: 200px;
 }
-
-  #settings-panel {
-    background-color: white !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    opacity: 1 !important;
-  }
   </style>
 </head>
 <body>
@@ -240,16 +237,21 @@
   top: 50px;
   right: 10px;
   display: none;
-  background-color: white !important;
+  background: white;
+  color: black;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  z-index: 10;
-  width: 200px;
-  backdrop-filter: none !important;
-  opacity: 1 !important;
+  z-index: 9999;
+  min-height: 100px;
+  min-width: 150px;
 ">
+  <p>设置内容</p>
+</div>
+<button onclick="document.getElementById('settings-panel').style.display = 'block'">
+  Settings
+</button>
     <h3>Settings</h3>
     <label>Redeem Code:</label><br>
     <input type="text" id="redeem-code-input" placeholder="Enter code" style="width: 100%;"><br><br>
