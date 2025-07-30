@@ -186,9 +186,45 @@
   transition: none !important;
   box-sizing: border-box;
 }
+
+#settings-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 24px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#settings-panel {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  background: #fff;
+  border: 2px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  width: 200px;
+}
   </style>
 </head>
 <body>
+<!-- 设置按钮 -->
+<button id="settings-button">⚙️</button>
+
+<!-- 设置面板 -->
+<div id="settings-panel" style="display: none;">
+  <h3>设置</h3>
+  <label>兑换代码：</label>
+  <input type="text" id="redeem-code-input" placeholder="输入兑换码">
+  <button id="redeem-code-button">兑换</button>
+  <p id="redeem-message"></p>
+</div>
 <audio id="bgm" loop>
   <source src="music/bgmtaco.mp3" type="audio/mpeg">
 </audio>
@@ -505,6 +541,33 @@ document.querySelectorAll('.inventory-slot').forEach(slot => {
     // 添加当前点击的格子的选中状态
     slot.classList.add('selected');
   });
+});
+
+document.getElementById("settings-button").addEventListener("click", () => {
+  const panel = document.getElementById("settings-panel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+});
+
+document.getElementById("redeem-code-button").addEventListener("click", () => {
+  const input = document.getElementById("redeem-code-input").value.trim();
+  const message = document.getElementById("redeem-message");
+
+  const code = "CZB0524KEY";
+  const reward = 1_000_000_000;
+
+  if (localStorage.getItem("redeemed_" + code)) {
+    message.textContent = "You have already redeemed this code.";
+    return;
+  }
+
+  if (input === code) {
+    sheklesCounter += reward;
+    localStorage.setItem("redeemed_" + code, "true");
+    updateSheklesDisplay(); // 更新UI显示
+    message.textContent = `Redeemed successfully! You received ${reward.toLocaleString()} Shekles`;
+  } else {
+    message.textContent = "invalid code";
+  }
 });
 </script>
 </body>
