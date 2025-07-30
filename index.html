@@ -605,19 +605,57 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
   }
 });
 
-// 自动保存（每10秒）
-setInterval(() => {
-  const saveData = {
-    coins: gameState.coins,
-    fruits: gameState.fruits,
-    seeds: gameState.seeds,
-    landPlots: gameState.landPlots,
-  };
-  localStorage.setItem('tarcoSave', JSON.stringify(saveData));
-  console.log('✅ 自动存档完成');
-}, 10000); // 每10秒存一次
+// 游戏状态
+const gameState = {
+  coins: 0,
+  fruits: {},
+  seeds: {},
+  landPlots: Array(12).fill(null) // 每个地块可能是 null 或 { seed: "apple", plantedAt: 时间戳 }
+};
 
-// 启动时读取存档
+// 成熟时间配置（单位毫秒）
+const growthTime = 15000; // 15 秒成熟
+
+// DOM 引用
+const coinDisplay = document.getElementById('coin-count');
+const landContainer = document.getElementById('land-container');
+const inventorySlots = document.querySelectorAll('.inventory-slot');
+
+// 判断是否成熟
+function getGrowthStatus(crop) {
+  if (!crop) return '';
+  const elapsed = Date.now() - crop.plantedAt;
+  return elapsed >= growthTime ? '✅ 成熟' : '🌱 生长中';
+}
+
+// 渲染游戏状态
+function renderGame() {
+  coinDisplay.textContent = gameState.coins;
+
+  inventorySlots.forEach(slot => {
+    const item = slot.dataset.item;
+    const count = gameState.seeds[item] || gameState.fruits[item] || 0;
+    slot.textContent = count > 0 ? `${item} (${count})` : '';
+  });
+
+  const plots = landContainer.querySelectorAll('.land-plot');
+  plots.forEach((plot, index) => {
+    const crop = gameState.landPlots[index];
+    if (crop) {
+      plot.textContent = `${crop.seed} ${getGrowthStatus(crop)}`;
+    } else {
+      plot.textContent = '';
+    }
+  });
+}
+
+// 自动保存
+setInterval(() => {
+  localStorage.setItem('tarcoSave', JSON.stringify(gameState));
+  console.log('✅ 自动存档完成');
+}, 10000);
+
+// 启动读取存档
 window.addEventListener('load', () => {
   const saved = localStorage.getItem('tarcoSave');
   if (saved) {
@@ -625,24 +663,33 @@ window.addEventListener('load', () => {
     gameState.coins = data.coins || 0;
     gameState.fruits = data.fruits || {};
     gameState.seeds = data.seeds || {};
-    gameState.landPlots = data.landPlots || [];
-    // 调用你的渲染函数
-    renderGame();
+    gameState.landPlots = data.landPlots || Array(12).fill(null);
     console.log('🗃️ 存档已恢复');
   }
+  renderGame();
 });
 
-function renderGame() {
-  console.log('🌱 渲染游戏中...');
-  // TODO: 把 gameState 内容同步到画面上
-}
+// 选择种子
+let selectedSeed = null;
+inventorySlots.forEach(slot => {
+  slot.addEventListener('click', () => {
+    selectedSeed = slot.dataset.item;
+  });
+});
 
-const gameState = {
-  coins: 0,
-  fruits: {},
-  seeds: {},
-  landPlots: []
-};
+// 种植逻辑
+landContainer.addEventListener('click', e => {
+  if (!e.target.classList.contains('land-plot')) return;
+  const index = [...landContainer.children].indexOf(e.target);
+  if (!selectedSeed || (gameState.seeds[selectedSeed] || 0) <= 0) return;
+
+  gameState.landPlots[index] = {
+    seed: selectedSeed,
+    plantedAt: Date.now()
+  };
+  gameState.seeds[selectedSeed]--;
+  renderGame();
+});
 </script>
 </body>
 </html>
