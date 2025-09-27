@@ -694,6 +694,79 @@ landContainer.addEventListener('click', e => {
   gameState.seeds[selectedSeed]--;
   renderGame();
 });
+
+// 你的 JSONBin 配置
+const BIN_ID = "68d7b5a5ae596e708ffd98fe"; // bin id
+const API_KEY = "$2a$10$U9fH5TMXpJQkrH6/UW2fTu7iwYxWEJaK9saOijJoDJYAkBFH7nr1a"; // API 密钥
+
+// 读取存档
+async function loadGameData() {
+  const url = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Master-Key": API_KEY,
+    },
+  });
+
+  const result = await response.json();
+  console.log("加载到的存档:", result.record);
+
+  return result.record; // 返回存档数据
+}
+
+// 保存存档
+async function saveGameData(gameData) {
+  const url = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY,
+    },
+    body: JSON.stringify(gameData),
+  });
+
+  const result = await response.json();
+  console.log("存档已保存:", result);
+}
+
+// =============================
+// 游戏里接入的方法
+// =============================
+
+// 游戏状态
+const gameState = {
+  coins: 0,
+  fruits: {},
+  seeds: {},
+  landPlots: Array(12).fill(null)
+};
+
+// 启动时读取存档
+window.addEventListener("load", async () => {
+  try {
+    const saved = await loadGameData();
+    if (saved) {
+      Object.assign(gameState, saved);
+      console.log("✅ 存档恢复成功:", gameState);
+    }
+  } catch (e) {
+    console.error("❌ 读取存档失败:", e);
+  }
+  renderGame(); // 你的渲染函数
+});
+
+// 定时保存存档
+setInterval(async () => {
+  try {
+    await saveGameData(gameState);
+  } catch (e) {
+    console.error("❌ 保存存档失败:", e);
+  }
+}, 10000);
 </script>
 </body>
 </html>
