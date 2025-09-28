@@ -609,7 +609,9 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
   }
 });
 
+// =============================
 // 游戏状态
+// =============================
 const gameState = {
   coins: 0,
   fruits: {},
@@ -653,26 +655,6 @@ function renderGame() {
   });
 }
 
-// 自动保存
-setInterval(() => {
-  localStorage.setItem('tacoSave', JSON.stringify(gameState));
-  console.log('✅ 自动存档完成');
-}, 10000);
-
-// 启动读取存档
-window.addEventListener('load', () => {
-  const saved = localStorage.getItem('tacoSave');
-  if (saved) {
-    const data = JSON.parse(saved);
-    gameState.coins = data.coins || 0;
-    gameState.fruits = data.fruits || {};
-    gameState.seeds = data.seeds || {};
-    gameState.landPlots = data.landPlots || Array(12).fill(null);
-    console.log('🗃️ 存档已恢复');
-  }
-  renderGame();
-});
-
 // 选择种子
 let selectedSeed = null;
 inventorySlots.forEach(slot => {
@@ -695,9 +677,11 @@ landContainer.addEventListener('click', e => {
   renderGame();
 });
 
-// 你的 JSONBin 配置
-const BIN_ID = "68d7b5a5ae596e708ffd98fe"; // bin id
-const API_KEY = "$2a$10$U9fH5TMXpJQkrH6/UW2fTu7iwYxWEJaK9saOijJoDJYAkBFH7nr1a"; // API 密钥
+// =============================
+// JSONBin 配置
+// =============================
+const BIN_ID = "68d7b5a5ae596e708ffd98fe"; 
+const API_KEY = "$2a$10$U9fH5TMXpJQkrH6/UW2fTu7iwYxWEJaK9saOijJoDJYAkBFH7nr1a";
 
 // 读取存档
 async function loadGameData() {
@@ -734,18 +718,8 @@ async function saveGameData(gameData) {
 }
 
 // =============================
-// 游戏里接入的方法
-// =============================
-
-// 游戏状态
-const gameState = {
-  coins: 0,
-  fruits: {},
-  seeds: {},
-  landPlots: Array(12).fill(null)
-};
-
 // 启动时读取存档
+// =============================
 window.addEventListener("load", async () => {
   try {
     const saved = await loadGameData();
@@ -756,7 +730,7 @@ window.addEventListener("load", async () => {
   } catch (e) {
     console.error("❌ 读取存档失败:", e);
   }
-  renderGame(); // 你的渲染函数
+  renderGame(); // 渲染
 });
 
 // 定时保存存档
