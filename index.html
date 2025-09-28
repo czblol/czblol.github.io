@@ -613,7 +613,7 @@ document.getElementById("redeem-code-button").addEventListener("click", () => {
 // 游戏状态
 // =============================
 const gameState = {
-  coins: 0,
+  sheckles: 0,
   fruits: {},
   seeds: {},
   landPlots: Array(12).fill(null) // 每个地块可能是 null 或 { seed: "apple", plantedAt: 时间戳 }
@@ -680,7 +680,7 @@ landContainer.addEventListener('click', e => {
 // =============================
 // JSONBin 配置
 // =============================
-const BIN_ID = "68d7b5a5ae596e708ffd98fe"; 
+const BIN_ID = "68d9063fae596e708ffe92c3"; 
 const API_KEY = "$2a$10$U9fH5TMXpJQkrH6/UW2fTu7iwYxWEJaK9saOijJoDJYAkBFH7nr1a";
 
 // 读取存档
