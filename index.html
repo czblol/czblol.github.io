@@ -681,7 +681,7 @@ landContainer.addEventListener('click', e => {
 // JSONBin 配置
 // =============================
 const BIN_ID = "68d9063fae596e708ffe92c3"; 
-const API_KEY = "$2a$10$U9fH5TMXpJQkrH6/UW2fTu7iwYxWEJaK9saOijJoDJYAkBFH7nr1a";
+const API_KEY = "$2a$10$7cL2RwLtTXmbRmTs6cyX9O6ffaYjxrlUzX0Fdux2jfoZ0fsAyQhVe";
 
 // 读取存档
 async function loadGameData() {
@@ -741,6 +741,133 @@ setInterval(async () => {
     console.error("❌ 保存存档失败:", e);
   }
 }, 10000);
+
+/* ==== 配置：把下面两个改成你的值 ==== */
+
+/* 构建发送到 JSONBin 的数据（只存必要字段，避免重复/循环引用）*/
+function buildSavePayload() {
+  return {
+    sheckles: typeof sheckles !== 'undefined' ? sheckles : 0,
+    inventory: Array.isArray(inventory) ? inventory : [],
+    plots: Array.isArray(plots) ? plots : [],
+    // 你还想保什么加什么：
+    selectedItem: selectedItem || null,
+    timestamp: Date.now()
+  };
+}
+
+/* 从 JSONBin 拉数据 */
+async function loadFromJsonBin() {
+  try {
+    const url = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-Master-Key': API_KEY
+      }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const j = await res.json();
+    return j.record || j; // v3 返回 record
+  } catch (err) {
+    console.warn('loadFromJsonBin failed:', err);
+    return null;
+  }
+}
+
+/* 保存到 JSONBin（PUT）并同时写 localStorage 作为备份 */
+async function saveToJsonBin() {
+  const payload = buildSavePayload();
+  try {
+    const url = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': API_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const j = await res.json();
+    console.log('Saved to JSONBin:', j);
+    // 额外写 localStorage 备份
+    try { localStorage.setItem('tacoSave', JSON.stringify(payload)); } catch(e){}
+    return true;
+  } catch (err) {
+    console.error('saveToJsonBin failed, saving to localStorage fallback:', err);
+    try { localStorage.setItem('tacoSave', JSON.stringify(payload)); } catch(e){}
+    return false;
+  }
+}
+
+/* 从 localStorage 读取（作为 JSONBin 的后备） */
+function loadFromLocal() {
+  try {
+    const raw = localStorage.getItem('tacoSave');
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    console.warn('loadFromLocal failed', e);
+    return null;
+  }
+}
+
+/* restore data -> 把读取到的数据写回页面变量并刷新显示 */
+function restoreIntoGame(data) {
+  if (!data) return;
+  if (typeof data.sheckles !== 'undefined') sheckles = data.sheckles;
+  if (Array.isArray(data.inventory)) {
+    inventory.length = 0;
+    data.inventory.forEach(it => inventory.push(it));
+  }
+  if (Array.isArray(data.plots)) {
+    for (let i = 0; i < plots.length; i++) {
+      plots[i] = data.plots[i] ?? null;
+    }
+  }
+  selectedItem = data.selectedItem || null;
+  // 更新界面（你的函数）
+  if (typeof updateDisplay === 'function') updateDisplay();
+  console.log('Restored data into game:', data);
+}
+
+/* 启动时先尝试从 JSONBin 读档，否则 localStorage */
+async function loadSaveOnStart() {
+  let data = null;
+  try {
+    data = await loadFromJsonBin();
+  } catch (e) { data = null; }
+  if (!data) {
+    data = loadFromLocal();
+  }
+  if (data) restoreIntoGame(data);
+}
+
+/* 定时自动保存（10s）并在离开页面时保存一次 */
+function startAutoSave() {
+  // 每 10 秒保存一次
+  setInterval(() => {
+    saveToJsonBin().catch(()=>{});
+  }, 10000);
+
+  // 离开页面时保存一次（尽量同步）
+  window.addEventListener('beforeunload', (e) => {
+    // 尝试同步写 localStorage（同步 API）
+    try { localStorage.setItem('tacoSave', JSON.stringify(buildSavePayload())); } catch(e){}
+    // 触发一个异步保存（无法等待）
+    saveToJsonBin();
+  });
+}
+
+/* 在页面完全 load 后开始加载和自动保存（放在你的 window.onload 内或之后都可以） */
+window.addEventListener('load', async () => {
+  // 1) 先尝试加载
+  await loadSaveOnStart();
+  // 2) 启动自动保存
+  startAutoSave();
+});
+</script>
 </script>
 </body>
 </html>
